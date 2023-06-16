@@ -1,0 +1,70 @@
+version: "3.6"
+services:
+  app:
+    build: .
+    depends_on:
+      - postgres
+      - hasura
+      - soruce-db
+      - destination-db
+    env_file:
+      - .env
+    volumes:
+      - "./:/app"
+      - "./.docker-data/app/vscode-server:/root/.vscode-server"
+  postgres:
+    image: postgres:15
+    restart: always
+    volumes:
+      - ./.docker-data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: db
+  soruce-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "${SOURCE_DB_PORT}:1433"
+    volumes:
+      - ./.docker-data/soruce-db:/var/opt/mssql/data
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Passw0rd!12345
+
+  destination-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "${DESTINATION_DB_PORT}:1433"
+    volumes:
+      - ./.docker-data/destination-db:/var/opt/mssql/data
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Passw0rd!12345
+
+  hasura:
+    image: hasura/graphql-engine:v2.27.0.cli-migrations-v3
+    depends_on:
+      - postgres
+      - soruce-db
+    ports:
+      - ${HASURA_PORT}:8080
+    volumes:
+      - ./hasura/metadata:/hasura-metadata
+    restart: always
+    environment:
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/db
+      ## this env var can be used to add the above ms sql server database to Hasura as a data source. this can be removed/updated based on your needs
+      MSSQL_DATABASE_URL: Driver={ODBC Driver 18 for SQL Server};Server=tcp:soruce-db,1433;Database=tempdb;Uid=sa;Pwd=Passw0rd!12345;Encrypt=yes;TrustServerCertificate=yes;
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
+      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+      ## uncomment next line to set an admin secret
+      HASURA_GRAPHQL_ADMIN_SECRET: secret
+volumes:
+  pg_data:
+  mssql_data:

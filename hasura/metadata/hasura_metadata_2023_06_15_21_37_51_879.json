@@ -1,0 +1,54 @@
+{
+  "resource_version": 3,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "SOURCE_DB",
+        "kind": "mssql",
+        "tables": [
+          {
+            "table": {
+              "name": "customer",
+              "schema": "dbo"
+            }
+          },
+          {
+            "table": {
+              "name": "customer_delta",
+              "schema": "dbo"
+            }
+          },
+          {
+            "table": {
+              "name": "order",
+              "schema": "dbo"
+            }
+          },
+          {
+            "table": {
+              "name": "order_delta",
+              "schema": "dbo"
+            }
+          },
+          {
+            "table": {
+              "name": "shipment",
+              "schema": "dbo"
+            }
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "connection_string": "Driver={ODBC Driver 18 for SQL Server};Server=tcp:soruce-db,1433;Database=tempdb;Uid=sa;Pwd=Passw0rd!12345;Encrypt=yes;TrustServerCertificate=yes;",
+            "pool_settings": {
+              "idle_timeout": 5,
+              "max_connections": null,
+              "total_max_connections": null
+            }
+          }
+        }
+      }
+    ]
+  }
+}

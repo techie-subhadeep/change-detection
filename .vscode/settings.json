@@ -1,0 +1,46 @@
+{
+    "files.eol": "\n",
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "black",
+    "editor.formatOnSave": true,
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+    "isort.args": [
+        "--profile",
+        "black",
+    ],
+    "python.defaultInterpreterPath": "/usr/local/bin/python",
+    "vsintellicode.features.python.deepLearning": "enabled",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/*.egg*": true
+    },
+    "files.watcherExclude": {
+        "**/.docker-data": true
+    },
+    "search.exclude": {
+        "**/.docker-data": true
+    },
+    "todo-tree.filtering.excludeGlobs": [
+        "**/node_modules",
+        "**/.docker-data"
+    ],
+    "python.linting.ignorePatterns": [
+        "**/site-packages/**/*.py",
+        ".vscode/*.py",
+        "**/.docker-data"
+    ],
+    "python.analysis.extraPaths": [
+        "/usr/local/lib/python3.10/site-packages",
+        "./ta_box/indicators"
+    ]
+}
