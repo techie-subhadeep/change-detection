@@ -13,20 +13,20 @@
             "justMyCode": true
         },
         {
-            "name": "Kite-Box",
+            "name": "Hasura Approach",
             "type": "python",
             "request": "launch",
-            "module": "uvicorn",
-            "cwd": "${workspaceFolder}/kite_box",
-            "args": [
-                "main:app",
-                "--reload",
-                "--host",
-                "0.0.0.0",
-                "--port",
-                "8000"
-            ],
+            "program": "${workspaceFolder}/approach_hasura.py",
+            "console": "integratedTerminal",
             "justMyCode": true
-        }
+        },
+        {
+            "name": "Hash Approach",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/approach_hash.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
     ]
 }

@@ -11,6 +11,7 @@ def update_destination_shipment(
     contact: str,
     item: str,
     quantity: str,
+    **_,
 ):
     """
     Update
