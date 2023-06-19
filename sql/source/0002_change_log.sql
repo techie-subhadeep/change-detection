@@ -7,12 +7,12 @@ BEGIN
     WHERE 1 = 0;
 
     ALTER TABLE [dbo].[customer_delta]
-    ADD [__change_id] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() NOT NULL,
-        [__change_at] DATETIME NOT NULL,
-        [__change] VARCHAR(1) NOT NULL;
+    ADD [delta_change_id] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() NOT NULL,
+        [delta_change_at] DATETIME NOT NULL,
+        [delta_change] VARCHAR(1) NOT NULL;
     
     ALTER TABLE [dbo].[customer_delta]
-    ADD CONSTRAINT [PK_customer_delta] PRIMARY KEY ([__change_id]);
+    ADD CONSTRAINT [PK_customer_delta] PRIMARY KEY ([delta_change_id]);
 END
 GO
 
@@ -25,11 +25,11 @@ BEGIN
     WHERE 1 = 0;
 
     ALTER TABLE [dbo].[order_delta]
-    ADD [__change_id] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() NOT NULL,
-        [__change_at] DATETIME NOT NULL,
-        [__change] VARCHAR(1) NOT NULL;
+    ADD [delta_change_id] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() NOT NULL,
+        [delta_change_at] DATETIME NOT NULL,
+        [delta_change] VARCHAR(1) NOT NULL;
     
     ALTER TABLE [dbo].[order_delta]
-    ADD CONSTRAINT [PK_order_delta] PRIMARY KEY ([__change_id]);
+    ADD CONSTRAINT [PK_order_delta] PRIMARY KEY ([delta_change_id]);
 END
 GO

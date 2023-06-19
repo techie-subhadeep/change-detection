@@ -8,6 +8,9 @@ authors = ["Subhadeep Das <cloud.subhadeepdas@gmail.com>"]
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
 pyodbc = "^4.0.39"
+gql = "^3.4.1"
+websockets = "^11.0.3"
+loguru = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"

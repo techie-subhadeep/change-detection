@@ -24,6 +24,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
       POSTGRES_DB: db
+  redis:
+    image: redis/redis-stack
+    ports:
+      - "${REDIS_UI_PORT}:8001"
+    volumes:
+      - ./.docker-data/redis:/data
   soruce-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:

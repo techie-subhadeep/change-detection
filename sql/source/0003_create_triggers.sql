@@ -9,21 +9,21 @@ BEGIN
     IF EXISTS(SELECT * from inserted) AND EXISTS (SELECT * FROM deleted)
     BEGIN
         INSERT INTO [dbo].[customer_delta]
-        SELECT *,NEWID() __change_id, GETDATE() AS __change_at, 'U' AS __change
+        SELECT *,NEWID() delta_change_id, GETDATE() AS delta_change_at, 'U' AS delta_change
         FROM inserted;
     END
 
     IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS(SELECT * FROM deleted)
     BEGIN
         INSERT INTO [dbo].[customer_delta]
-        SELECT *,NEWID() __change_id, GETDATE() AS __change_at, 'I' AS __change
+        SELECT *,NEWID() delta_change_id, GETDATE() AS delta_change_at, 'I' AS delta_change
         FROM inserted;
     END
 
     IF EXISTS(SELECT * FROM deleted) AND NOT EXISTS(SELECT * FROM inserted)
     BEGIN
         INSERT INTO [dbo].[customer_delta]
-        SELECT *,NEWID() __change_id, GETDATE() AS __change_at, 'D' AS __change
+        SELECT *,NEWID() delta_change_id, GETDATE() AS delta_change_at, 'D' AS delta_change
         FROM deleted;
     END
 END
@@ -41,21 +41,21 @@ BEGIN
     IF EXISTS(SELECT * from inserted) AND EXISTS (SELECT * FROM deleted)
     BEGIN
         INSERT INTO [dbo].[order_delta]
-        SELECT *,NEWID() __change_id, GETDATE() AS __change_at, 'U' AS __change
+        SELECT *,NEWID() delta_change_id, GETDATE() AS delta_change_at, 'U' AS delta_change
         FROM inserted;
     END
 
     IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS(SELECT * FROM deleted)
     BEGIN
         INSERT INTO [dbo].[order_delta]
-        SELECT *,NEWID() __change_id, GETDATE() AS __change_at, 'I' AS __change
+        SELECT *,NEWID() delta_change_id, GETDATE() AS delta_change_at, 'I' AS delta_change
         FROM inserted;
     END
 
     IF EXISTS(SELECT * FROM deleted) AND NOT EXISTS(SELECT * FROM inserted)
     BEGIN
         INSERT INTO [dbo].[order_delta]
-        SELECT *,NEWID() __change_id, GETDATE() AS __change_at, 'D' AS __change
+        SELECT *,NEWID() delta_change_id, GETDATE() AS delta_change_at, 'D' AS delta_change
         FROM deleted;
     END
 END

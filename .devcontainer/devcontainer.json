@@ -44,7 +44,7 @@
 		"shamanu4.django-intellisense",
 		"christian-kohler.path-intellisense",
 		"njqdev.vscode-python-typehint",
-		"PhilHindle.errorlens"
+		"usernamehw.errorlens"
 	]
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
