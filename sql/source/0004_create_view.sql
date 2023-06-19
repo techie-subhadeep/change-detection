@@ -16,4 +16,4 @@ FROM   [dbo].[customer_delta] c,
 WHERE  o.customer_id = c.id
     AND ( o.__change_at > Dateadd(second, -30, Getdate())
             OR c.__change_at > Dateadd(second, -30, Getdate()) );
-
+GO

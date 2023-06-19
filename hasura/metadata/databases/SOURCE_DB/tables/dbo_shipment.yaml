@@ -1,0 +1,3 @@
+table:
+  name: shipment
+  schema: dbo

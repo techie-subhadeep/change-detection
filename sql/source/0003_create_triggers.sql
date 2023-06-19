@@ -27,7 +27,7 @@ BEGIN
         FROM deleted;
     END
 END
-
+GO
 
 
 -- Create Copy Trigger for Order
@@ -59,3 +59,4 @@ BEGIN
         FROM deleted;
     END
 END
+GO

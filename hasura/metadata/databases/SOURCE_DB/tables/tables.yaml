@@ -1,0 +1,5 @@
+- "!include dbo_customer.yaml"
+- "!include dbo_customer_delta.yaml"
+- "!include dbo_order.yaml"
+- "!include dbo_order_delta.yaml"
+- "!include dbo_shipment.yaml"

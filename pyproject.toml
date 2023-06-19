@@ -7,6 +7,7 @@ authors = ["Subhadeep Das <cloud.subhadeepdas@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
+pyodbc = "^4.0.39"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"

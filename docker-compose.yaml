@@ -12,6 +12,9 @@ services:
     volumes:
       - "./:/app"
       - "./.docker-data/app/vscode-server:/root/.vscode-server"
+    environment:
+      SOURCE_DB_CONNSTR: Driver={ODBC Driver 18 for SQL Server};Server=tcp:soruce-db,1433;Database=master;Uid=sa;Pwd=Passw0rd!12345;Encrypt=yes;TrustServerCertificate=yes;
+      DESTINATION_DB_CONNSTR: Driver={ODBC Driver 18 for SQL Server};Server=tcp:destination-db,1433;Database=master;Uid=sa;Pwd=Passw0rd!12345;Encrypt=yes;TrustServerCertificate=yes;
   postgres:
     image: postgres:15
     restart: always
@@ -26,20 +29,74 @@ services:
     ports:
       - "${SOURCE_DB_PORT}:1433"
     volumes:
+      - ./sql/source:/scripts
       - ./.docker-data/soruce-db:/var/opt/mssql/data
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: Passw0rd!12345
+    command:
+      - /bin/bash
+      - -c
+      - |
+        # Launch MSSQL and send to background
+        /opt/mssql/bin/sqlservr &
+        pid=$!
+        # Wait for it to be available
+        echo "Waiting for MS SQL to be available"
+        /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+        is_up=$$?
+        while [ $$is_up -ne 0 ] ; do 
+          echo -e $$(date) 
+          /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+          is_up=$$?
+          sleep 5 
+        done
+        # Run every script in /scripts
+        for foo in /scripts/*.sql
+          do /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -l 30 -e -i $$foo
+        done
+        # trap SIGTERM and send same to sqlservr process for clean shutdown
+        trap "kill -15 $$pid" SIGTERM
+        # Wait on the sqlserver process
+        wait $$pid
+        exit 0
 
   destination-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
       - "${DESTINATION_DB_PORT}:1433"
     volumes:
+      - ./sql/destination:/scripts
       - ./.docker-data/destination-db:/var/opt/mssql/data
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: Passw0rd!12345
+    command:
+      - /bin/bash
+      - -c
+      - |
+        # Launch MSSQL and send to background
+        /opt/mssql/bin/sqlservr &
+        pid=$!
+        # Wait for it to be available
+        echo "Waiting for MS SQL to be available"
+        /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+        is_up=$$?
+        while [ $$is_up -ne 0 ] ; do 
+          echo -e $$(date) 
+          /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+          is_up=$$?
+          sleep 5 
+        done
+        # Run every script in /scripts
+        for foo in /scripts/*.sql
+          do /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -l 30 -e -i $$foo
+        done
+        # trap SIGTERM and send same to sqlservr process for clean shutdown
+        trap "kill -15 $$pid" SIGTERM
+        # Wait on the sqlserver process
+        wait $$pid
+        exit 0
 
   hasura:
     image: hasura/graphql-engine:v2.27.0.cli-migrations-v3
@@ -55,7 +112,7 @@ services:
       ## postgres database to store Hasura metadata
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/db
       ## this env var can be used to add the above ms sql server database to Hasura as a data source. this can be removed/updated based on your needs
-      MSSQL_DATABASE_URL: Driver={ODBC Driver 18 for SQL Server};Server=tcp:soruce-db,1433;Database=tempdb;Uid=sa;Pwd=Passw0rd!12345;Encrypt=yes;TrustServerCertificate=yes;
+      MSSQL_DATABASE_URL: Driver={ODBC Driver 18 for SQL Server};Server=tcp:soruce-db,1433;Database=master;Uid=sa;Pwd=Passw0rd!12345;Encrypt=yes;TrustServerCertificate=yes;
       ## enable the console served by server
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
