@@ -2,7 +2,7 @@ import json
 import xxhash
 import redis
 from loguru import logger
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 def __calculate_hash(**kwargs):

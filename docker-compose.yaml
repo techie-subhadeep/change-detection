@@ -113,6 +113,7 @@ services:
       - ${HASURA_PORT}:8080
     volumes:
       - ./hasura/metadata:/hasura-metadata
+      - ./hasura/migrations:/hasura-migrations
     restart: always
     environment:
       ## postgres database to store Hasura metadata

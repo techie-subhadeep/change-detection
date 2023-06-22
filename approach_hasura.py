@@ -14,19 +14,19 @@ gql_client = Client(
 )
 
 query = gql(
-    """
-subscription {
-    shipment {
-        address
-        contact
-        item
-        customer_name
-        quantity
-        shipment_id
-        order_change
-        customer_change
+    r"""
+    subscription {
+        shipment(where: {seconds_passed: {_lte: 30}}) {
+            address
+            contact
+            item
+            customer_name
+            quantity
+            shipment_id
+            order_change
+            customer_change
+        }
     }
-}
 """
 )
 
