@@ -16,7 +16,10 @@ gql_client = Client(
 query = gql(
     r"""
     subscription {
-        shipment(where: {seconds_passed: {_lte: 30}}) {
+        shipment(
+            where: {seconds_passed: {_lte: 30}},
+            order_by: {seconds_passed: asc}
+        ) {
             address
             contact
             item
